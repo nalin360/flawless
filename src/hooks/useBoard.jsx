@@ -37,6 +37,7 @@ const MapBoard = () => {
           </li>
         ))}
       </ul>
+
     </div>
  );
 };
