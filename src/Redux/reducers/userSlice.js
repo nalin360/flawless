@@ -20,6 +20,7 @@ const userSlice = createSlice({
     },
     addCard: (state, action) => {
       console.log("action", action, state.list);
+      
 
       state.list.forEach((item) => {
         if (item.id === action.payload.parentId) {
