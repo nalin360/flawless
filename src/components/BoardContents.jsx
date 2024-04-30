@@ -2,6 +2,8 @@ import React from 'react';
 import Board from './Dashboard2/Board';
 
 
+
+
 function BoardContents() {
   return (
     <div>
