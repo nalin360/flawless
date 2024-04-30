@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 
 // Custom hook for authentication
 const useAuth = () => {
- const [user, setUser] = useState(null);
+ const [user, setUser] = useState(() => {
+  // Attempt to load user from localStorage
+  const storedUser = localStorage.getItem('user');
+  return storedUser ? JSON.parse(storedUser) : null;
+});
  const [loading, setLoading] = useState(false);
  const [error, setError] = useState(null);
  const [userID, setuserID] = useState('');
 
- const baseurl = 'http://localhost:3001'
+ const baseurl = import.meta.env.VITE_API_URL
 
  // Function to login
  const login = async (email, password) => {
@@ -26,9 +30,12 @@ const useAuth = () => {
         throw new Error('Login failed');
       }
 
-      const data = await response.json();
-      setUser(data);
-      // console.log(data._id);
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+        // Save user to localStorage
+        localStorage.setItem('user', JSON.stringify(data));
+      }
       setuserID(data._id)
     } catch (error) {
       setError(error.message);
@@ -69,7 +76,18 @@ const useAuth = () => {
  const logout = () => {
     // Implement logout logic here
     setUser(null);
+    localStorage.removeItem('user');
  };
+
+  // Use an effect to update localStorage when user changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
+    }
+ }, [user]);
+
 
  return { user, loading, error, userID,login, register, logout };
 };

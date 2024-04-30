@@ -10,7 +10,7 @@ const useTodo = (userId) => {
 
     
 
-    const baseurl = 'http://localhost:3001'
+    const baseurl = import.meta.env.VITE_API_URL
     useEffect(() => {
         const fetchTodos = async () => {
             setLoading(true);
